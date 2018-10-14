@@ -9,24 +9,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
-
-        </activity>
-        <activity android:name=".LoginActivity">
-
-        </activity>
+        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".LoginActivity"></activity>
         <activity android:name=".SecondActivity" />
         <activity android:name=".Mp3PlayerActivity">
+
+        </activity>
+
+        <service android:name=".Mp3PlayerService">
+            <intent-filter>
+                <action android:name="wang.yiwangchunyu.android.service.MP3PLAYER" />
+            </intent-filter>
+        </service>
+
+        <activity android:name=".BatteryActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".Mp3PlayerService">
-            <intent-filter>
-                <action android:name="wang.yiwangchunyu.android.service.MP3PLAYER"/>
-            </intent-filter>
-        </service>
     </application>
 
 </manifest>
