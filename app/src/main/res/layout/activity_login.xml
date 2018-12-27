@@ -162,7 +162,7 @@
                 android:layout_toRightOf="@+id/tv_singup0"
                 android:layout_weight="1"
                 android:text="注册"
-                android:textColor="@color/colorPrimary" />
+                android:textColor="@color/colorClick" />
         </LinearLayout>
 
     </RelativeLayout>
