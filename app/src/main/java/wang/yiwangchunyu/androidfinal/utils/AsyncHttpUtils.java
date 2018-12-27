@@ -5,6 +5,8 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 
+import wang.yiwangchunyu.androidfinal.constants.UrlConstants;
+
 /**
  * Created by eminem on 2017/4/28.
  *
@@ -12,7 +14,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 
 public class AsyncHttpUtils {
 
-    private static final String BASE_URL = "https://api.weibo.com/2/";
+    private static final String BASE_URL = UrlConstants.URL_PRE;
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 

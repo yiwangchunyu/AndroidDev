@@ -15,7 +15,7 @@ import wang.yiwangchunyu.androidfinal.bean.User;
 import wang.yiwangchunyu.androidfinal.utils.AppManager;
 
 /**
- * Created by Eminem on 2016/11/30.
+ *
  */
 
 public class BaseApplication extends Application {

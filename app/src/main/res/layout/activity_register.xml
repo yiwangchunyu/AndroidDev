@@ -90,13 +90,45 @@
 
 
     <RelativeLayout
+        android:id="@+id/rl_userPasswordCheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_userPassword"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="5dp">
+
+        <EditText
+            android:id="@+id/et_passwordCheck"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:background="@null"
+            android:drawablePadding="5dp"
+            android:ems="19"
+            android:hint="确认密码"
+            android:inputType="textPassword"
+            android:textSize="15sp" />
+
+        <ImageView
+            android:id="@+id/iv_pwdCheckClear"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="40dp"
+            android:src="@drawable/delete" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:id="@+id/check_box"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rl_userPassword"
+        android:layout_below="@+id/rl_userPasswordCheck"
         android:layout_marginLeft="60dp"
-        android:layout_marginRight="60dp"
-        android:layout_marginTop="15dp">
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="60dp">
 
         <RadioGroup
             android:id="@+id/rg_genders"
@@ -121,6 +153,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:checked="true"
                     android:text="男" />
             </LinearLayout>
 
