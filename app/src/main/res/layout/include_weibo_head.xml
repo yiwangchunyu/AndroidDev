@@ -34,7 +34,7 @@
             android:id="@+id/tv_head_desc"
             style="@style/TextViewCaption"
             android:layout_alignParentBottom="true"
-            android:hint="挣很多很多钱，买很对很对哇哈哈"
+            android:hint="山雨欲来风满楼"
             android:maxLines="1"
             android:textColor="@color/txt_gray" />
     </RelativeLayout>

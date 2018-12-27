@@ -1,7 +1,10 @@
 package wang.yiwangchunyu.androidfinal.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -14,16 +17,25 @@ import android.widget.Toast;
 import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
 import com.aspsine.swipetoloadlayout.OnRefreshListener;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
+import com.google.gson.Gson;
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import cz.msebera.android.httpclient.Header;
 import wang.yiwangchunyu.androidfinal.BaseFragment;
 import wang.yiwangchunyu.androidfinal.R;
-import wang.yiwangchunyu.androidfinal.adapter.StatusAdapter;
-import wang.yiwangchunyu.androidfinal.bean.Status;
-import wang.yiwangchunyu.androidfinal.bean.StatusTimeLineResponse;
+import wang.yiwangchunyu.androidfinal.adapter.StatusAdapterDemo;
+import wang.yiwangchunyu.androidfinal.bean.StatusDemo;
+import wang.yiwangchunyu.androidfinal.bean.StatusTimeLineResponseDemo;
+import wang.yiwangchunyu.androidfinal.utils.AsyncHttpUtils;
+import wang.yiwangchunyu.androidfinal.utils.Logger;
 import wang.yiwangchunyu.androidfinal.utils.TitleBuilder;
 import wang.yiwangchunyu.androidfinal.utils.ToastUtils;
 
@@ -33,18 +45,21 @@ import wang.yiwangchunyu.androidfinal.utils.ToastUtils;
  */
 
 public class WeiboFragment extends BaseFragment {
+    private static final String TAG = "WeiboFragment";
     private SwipeToLoadLayout swipeToLoadLayout;
     private ListView lvHome;
     private View view;
-    private StatusAdapter adapter;
-    private List<Status> statuses = new ArrayList<>();
+    private StatusAdapterDemo adapter;
+    private List<StatusDemo> statuses = new ArrayList<>();
     private int curPage = 1;
     private GestureDetector gestureDetector;
     private View view_search;
+    private Context mContent;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mContent = getContext();
         initView();
         initData(1);
         ButterKnife.bind(this, view);
@@ -75,7 +90,7 @@ public class WeiboFragment extends BaseFragment {
 
 
         lvHome.addHeaderView(view_search);
-        adapter = new StatusAdapter(activity, statuses);
+        adapter = new StatusAdapterDemo(activity, statuses);
         lvHome.setAdapter(adapter);
         swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -124,37 +139,45 @@ public class WeiboFragment extends BaseFragment {
     }
 
     private void initData(final int page) {
-//        Oauth2AccessToken mAccessToken = AccessTokenKeeper.readAccessToken(activity);
-//        String token = mAccessToken.getToken();
-//        RequestParams params = new RequestParams();
-//        params.put("page", page);
-//        params.put("access_token", token);
-//        AsyncHttpUtils.get("statuses/home_timeline.json", params, new TextHttpResponseHandler() {
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-//                Toast.makeText(activity, responseString, Toast.LENGTH_LONG).show();
-//            }
-//
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-//                Logger.json(responseString);
-//                StatusTimeLineResponse timeLineResponse = new Gson().fromJson(responseString, StatusTimeLineResponse.class);
-////              lvHome.setAdapter(new StatusAdapter(activity, timeLineResponse.getStatuses()));
-//
-//                if (page == 1) {
-//                    statuses.clear();
-//                }
-//                curPage = page;
-////              lvHome.setAdapter(new StatusAdapter(activity, timeLineResponse.getStatuses()));
-//                addStatus(new Gson().fromJson(responseString, StatusTimeLineResponse.class));
-//
-//            }
-//        });
+        RequestParams params = new RequestParams();
+        AsyncHttpUtils.get("/dynamic/getAll", params, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.d(TAG, "fail: " + responseString);
+                ToastUtils.showToast(mContent, "fail: " + responseString, Toast.LENGTH_SHORT);
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                Log.d(TAG, "success: " + responseString);
+                JSONObject jsonRes = null;
+                try {
+                    jsonRes = new JSONObject(responseString);
+                    if (jsonRes.getInt("code") == 0) {
+                        String data = jsonRes.getJSONObject("data").toString();
+                        StatusTimeLineResponseDemo timeLineResponse = new Gson().fromJson(data, StatusTimeLineResponseDemo.class);
+                        lvHome.setAdapter(new StatusAdapterDemo(activity, timeLineResponse.getStatuses()));
+
+                        if (page == 1) {
+                            statuses.clear();
+                        }
+                        curPage = page;
+                        lvHome.setAdapter(new StatusAdapterDemo(activity, timeLineResponse.getStatuses()));
+                        addStatus(new Gson().fromJson(data, StatusTimeLineResponseDemo.class));
+
+                    } else {
+                        ToastUtils.showToast(mContent, jsonRes.getString("msg"), Toast.LENGTH_SHORT);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
 
-    private void addStatus(StatusTimeLineResponse resBean) {
-        for (Status status : resBean.getStatuses()) {
+    private void addStatus(StatusTimeLineResponseDemo resBean) {
+        for (StatusDemo status : resBean.getStatuses()) {
             if (!statuses.contains(status)) {
                 statuses.add(status);
             }
