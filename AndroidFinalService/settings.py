@@ -81,6 +81,13 @@ DATABASES = {
         'NAME': 'androidfinal',
         'USER': 'root',
         'PASSWORD': '123456',
+        'CHARSET': 'utf8',
+        'COLLATION': 'utf8_general_ci',
+        'TEST':{
+            'NAME':'test_androidfinal',
+            'CHARSET': 'utf8',
+            'COLLATION': 'utf8_general_ci',
+        }
     }
 }
 

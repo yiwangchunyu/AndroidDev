@@ -4,9 +4,10 @@ from server.models import Dynamic
 from server.service import UserService
 from server.utils import RR
 from server.service import DynamicService
-import settings
+from AndroidFinalService import settings
 
 def create(request):
+    print(request.POST)
     if request.POST:
         dict={
             "img1": None, "img2": None, "img3": None,
@@ -20,7 +21,8 @@ def create(request):
             img_list = request.FILES.getlist("imgs")
             for i,img in enumerate(img_list):
                 dict['img'+str(i+1)]=img
-        print(dict)
         dynamic = Dynamic(**dict)
+        print(dict)
         dynamic.save()
+        print(dict)
     return RR.finish(0,"ok",[])

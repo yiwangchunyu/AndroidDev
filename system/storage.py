@@ -4,7 +4,7 @@ from django.http import HttpResponse
 
 
 class ImageStorage(FileSystemStorage):
-    from django.conf import settings
+    from AndroidFinalService import settings
 
     def __init__(self, location=settings.MEDIA_ROOT, base_url=settings.MEDIA_URL):
         # 初始化
