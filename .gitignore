@@ -1,8 +1,6 @@
 .idea/
-AndroidFinalService/__pycache__/
 db.sqlite3
 static/
 media/
 server/migrations/
-*/__pycache__/*
-*/*/__pycache__/*
+__pycache__/
