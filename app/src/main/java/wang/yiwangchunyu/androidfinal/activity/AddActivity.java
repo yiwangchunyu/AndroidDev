@@ -21,15 +21,30 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.msebera.android.httpclient.Header;
+import wang.yiwangchunyu.androidfinal.LoginActivity;
+import wang.yiwangchunyu.androidfinal.MainActivity;
 import wang.yiwangchunyu.androidfinal.R;
 import wang.yiwangchunyu.androidfinal.utils.Adapter;
+import wang.yiwangchunyu.androidfinal.utils.AsyncHttpUtils;
 import wang.yiwangchunyu.androidfinal.utils.BitmapUtils;
+import wang.yiwangchunyu.androidfinal.utils.SharedHelper;
 import wang.yiwangchunyu.androidfinal.utils.TitleBuilder;
 import wang.yiwangchunyu.androidfinal.utils.ToastUtils;
 
@@ -37,7 +52,9 @@ public class AddActivity extends AppCompatActivity {
 
     private static final String TAG = "AddActivity";
     private List<Bitmap> data = new ArrayList<Bitmap>();
+    private List<String> imgPaths = new ArrayList<String>();
     private GridView mGridView;
+    private EditText etContent;
     private String photoPath;
     private Adapter adapter;
     private Context mContent;
@@ -52,6 +69,8 @@ public class AddActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
         mContent = this;
+        etContent = (EditText) findViewById(R.id.content_et);
+
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 checkPermission();
@@ -117,7 +136,48 @@ public class AddActivity extends AppCompatActivity {
     }
 
     private void dosend() {
+        SharedHelper sh = new SharedHelper(mContent);
+        RequestParams params = new RequestParams();
+        params.put("user_id", sh.read("userid"));
+        params.put("content", etContent.getText().toString());
+        params.put("img_count", imgPaths.size());
+        File[] files = new File[imgPaths.size()];
+        for(int i = 0; i<imgPaths.size(); i++){
+            files[i] = new File(imgPaths.get(i));
+        }
+        if(imgPaths.size()>0){
+            try {
+                params.put("imgs", files);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
 
+        AsyncHttpUtils.post("/dynamic/create", params, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.d(TAG, "fail: " + responseString);
+                ToastUtils.showToast(mContent, "fail: " + responseString, Toast.LENGTH_SHORT);
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                Log.d(TAG, "success: " + responseString);
+                JSONObject jsonRes = null;
+                try {
+                    jsonRes = new JSONObject(responseString);
+                    if (jsonRes.getInt("code") == 0) {
+                        Toast.makeText(mContent, "发布成功！", Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        ToastUtils.showToast(mContent, jsonRes.getString("msg"), Toast.LENGTH_SHORT);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        finish();
     }
 
     /*
@@ -132,6 +192,7 @@ public class AddActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 data.remove(position);
+                imgPaths.remove(position);
                 adapter.notifyDataSetChanged();
             }
         });
@@ -178,6 +239,7 @@ public class AddActivity extends AppCompatActivity {
             Bitmap bp = BitmapFactory.decodeResource(getResources(), R.drawable.compose_pic_add);
             data.add(newBp);
             data.add(bp);
+            imgPaths.add(photoPath);
             //将路径设置为空，防止在手机休眠后返回Activity调用此方法时添加照片
             photoPath = null;
             adapter.notifyDataSetChanged();
