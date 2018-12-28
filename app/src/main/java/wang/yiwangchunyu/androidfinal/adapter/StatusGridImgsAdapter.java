@@ -15,7 +15,6 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 
 import wang.yiwangchunyu.androidfinal.R;
-import wang.yiwangchunyu.androidfinal.bean.PicUrls;
 
 /**
  *
@@ -23,9 +22,9 @@ import wang.yiwangchunyu.androidfinal.bean.PicUrls;
 
 public class StatusGridImgsAdapter extends BaseAdapter {
     private Context context;
-    private ArrayList<PicUrls> datas;
+    private ArrayList<String> datas;
 
-    public StatusGridImgsAdapter(Context context, ArrayList<PicUrls> datas) {
+    public StatusGridImgsAdapter(Context context, ArrayList<String> datas) {
         this.context = context;
         this.datas = datas;
     }
@@ -67,8 +66,8 @@ public class StatusGridImgsAdapter extends BaseAdapter {
         LayoutParams params = new LayoutParams(itemWidth, itemWidth);
         holder.iv_image.setLayoutParams(params);
 
-        PicUrls urls = datas.get(position);
-        Glide.with(context).load(urls.getOriginal_pic()).placeholder(R.drawable.pic_postion).into(holder.iv_image);
+        String urls = datas.get(position);
+        Glide.with(context).load(urls).placeholder(R.drawable.pic_postion).into(holder.iv_image);
         return convertView;
     }
 

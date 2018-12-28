@@ -170,7 +170,11 @@ public class StatusAdapter extends BaseAdapter {
             imgContainer.setVisibility(View.VISIBLE);
             gv_images.setVisibility(View.VISIBLE);
             iv_image.setVisibility(View.GONE);
-            StatusGridImgsAdapter gvAdapter = new StatusGridImgsAdapter(context, pic_urls);
+            ArrayList<String> pics = new ArrayList<String>();
+            for(int i=0;i<pic_urls.size();i++){
+                pics.add(pic_urls.get(i).getOriginal_pic());
+            }
+            StatusGridImgsAdapter gvAdapter = new StatusGridImgsAdapter(context, pics);
             gv_images.setAdapter(gvAdapter);
             gv_images.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
