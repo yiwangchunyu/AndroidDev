@@ -140,7 +140,7 @@ public class WeiboFragment extends BaseFragment {
 
     private void initData(final int page) {
         RequestParams params = new RequestParams();
-        AsyncHttpUtils.get("/dynamic/getAll", params, new TextHttpResponseHandler() {
+        AsyncHttpUtils.post("/dynamic/getAll", params, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 Log.d(TAG, "fail: " + responseString);

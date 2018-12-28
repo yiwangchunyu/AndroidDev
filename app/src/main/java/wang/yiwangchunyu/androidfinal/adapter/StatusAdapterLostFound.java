@@ -18,34 +18,20 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import wang.yiwangchunyu.androidfinal.ImageBrowserActivity;
-import wang.yiwangchunyu.androidfinal.MainActivity;
 import wang.yiwangchunyu.androidfinal.R;
-import wang.yiwangchunyu.androidfinal.StatusDetailActivity;
-import wang.yiwangchunyu.androidfinal.WriteCommentActivity;
-import wang.yiwangchunyu.androidfinal.bean.PicUrlsDemo;
-import wang.yiwangchunyu.androidfinal.bean.StatusDemo;
-import wang.yiwangchunyu.androidfinal.bean.UserDemo;
-import wang.yiwangchunyu.androidfinal.constants.UrlConstants;
-import wang.yiwangchunyu.androidfinal.utils.DateUtils;
+import wang.yiwangchunyu.androidfinal.bean.StatusLostFoundItem;
 import wang.yiwangchunyu.androidfinal.utils.StringUtils;
 import wang.yiwangchunyu.androidfinal.utils.ToastUtils;
 
-/**
- * Created by eminem on 2017/4/28.
- * 微博首页adapter
- */
-
-public class StatusAdapterDemo extends BaseAdapter {
+public class StatusAdapterLostFound extends BaseAdapter {
     private Context context;
-    private List<StatusDemo> datas;
-
-    public StatusAdapterDemo(Context context, List<StatusDemo> datas) {
-        this.context = context;
-        this.datas = datas;
+    private ArrayList<StatusLostFoundItem> datas;
+    public StatusAdapterLostFound(Context context, ArrayList<StatusLostFoundItem> datas) {
+        this.context=context;
+        this.datas=datas;
     }
 
     @Override
@@ -65,8 +51,7 @@ public class StatusAdapterDemo extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
-        final ViewHolder holder;
+        final StatusAdapterLostFound.ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = View.inflate(context, R.layout.item_status, null);
@@ -75,8 +60,6 @@ public class StatusAdapterDemo extends BaseAdapter {
             holder.rl_content = (RelativeLayout) convertView.findViewById(R.id.rl_content);
             holder.tv_head_name = (TextView) convertView.findViewById(R.id.tv_head_name);
             holder.tv_head_desc = (TextView) convertView.findViewById(R.id.tv_head_desc);
-
-            holder.iv_more = (ImageView) convertView.findViewById(R.id.iv_more);
 
             holder.tv_content = (TextView) convertView.findViewById(R.id.tv_content);
             holder.include_status_image = (FrameLayout) convertView.findViewById(R.id.include_status_image);
@@ -103,110 +86,67 @@ public class StatusAdapterDemo extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        //微博用户
-        final StatusDemo status = (StatusDemo) getItem(position);
-        final UserDemo user = status.getUser();
-        Glide.with(context).load(UrlConstants.URL_MEDIA_PRE + user.getAvatar()).bitmapTransform(new CropCircleTransformation(context)).placeholder(R.drawable.head_pistion).into(holder.iv_head);
-        holder.tv_head_name.setText(user.getNickname());
-        holder.tv_head_desc.setText(status.getCtime());
-        holder.iv_more.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "more option", Toast.LENGTH_LONG).show();
-            }
-        });
-        //微博正文
-        holder.tv_content.setText(StringUtils.getWeiboContent(context, holder.tv_content, status.getContent()));
-        setImages(status, holder.include_status_image, holder.gv_images, holder.iv_image);
+        //用户
+        final StatusLostFoundItem statusLostFoundItem = (StatusLostFoundItem) getItem(position);
+        Glide.with(context).load(statusLostFoundItem.getAvatarUrl()).bitmapTransform(new CropCircleTransformation(context)).placeholder(R.drawable.head_pistion).into(holder.iv_head);
+        holder.tv_head_name.setText(statusLostFoundItem.getNickName());
+        holder.tv_head_desc.setText(statusLostFoundItem.getSubmission_time() + "  |  来自 " + statusLostFoundItem.getType());
+        //正文
+        holder.tv_content.setText(StringUtils.getWeiboContent(context, holder.tv_content, statusLostFoundItem.getMsg()));
+        setImages(statusLostFoundItem, holder.include_status_image, holder.gv_images, holder.iv_image);
 
         //转发内容
-//        final StatusDemo retweeted_status = status.getRetweeted_status();
-        final StatusDemo retweeted_status = null;
-        if (retweeted_status != null) {
-            UserDemo retUser = retweeted_status.getUser();
-            holder.include_retweeted_status.setVisibility(View.VISIBLE);
-            String retweetedContent = "@" + retUser.getNickname() + ":" + retweeted_status.getContent();
-            holder.tv_retweeted_content.setText(StringUtils.getWeiboContent(context, holder.tv_retweeted_content, retweetedContent));
-            setImages(retweeted_status, holder.include_retweeted_status_image, holder.gv_retweeted_images, holder.iv_retweeted_image);
-        } else {
-            holder.include_retweeted_status.setVisibility(View.GONE);
-        }
+        holder.include_retweeted_status.setVisibility(View.GONE);
 
         //转发评论点赞
-        holder.tv_share_bottom.setText(status.getPost() == 0 ? "转发" : status.getPost() + "");
+        holder.tv_share_bottom.setText("转发");
         holder.ll_share_bottom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ToastUtils.showToast(context, "转发", Toast.LENGTH_LONG);
             }
         });
-        holder.tv_like_bottom.setText(status.getLike() == 0 ? "赞" : status.getLike() + "");
+        holder.tv_like_bottom.setText("赞");
         holder.ll_like_bottom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ToastUtils.showToast(context, "点赞", Toast.LENGTH_LONG);
             }
         });
-        holder.tv_comment_bottom.setText(status.getComment() == 0 ? "评论" : status.getComment() + "");
+        holder.tv_comment_bottom.setText("评论");
         holder.ll_comment_bottom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ToastUtils.showToast(context, "评论", Toast.LENGTH_LONG);
-                if (status.getComment() > 0) {
-                    Intent intent = new Intent(context, StatusDetailActivity.class);
-                    intent.putExtra("status", status);
-                    context.startActivity(intent);
-                } else {
-                    Intent intent = new Intent(context, WriteCommentActivity.class);
-                    intent.putExtra("status", status);
-                    context.startActivity(intent);
-                }
-
             }
         });
         return convertView;
     }
 
     //图片设置处理
-    private void setImages(final StatusDemo status, FrameLayout imgContainer, GridView gv_images, ImageView iv_image) {
-        ArrayList<PicUrlsDemo> pic_urls = status.getPic_urls();
-//        String bmiddle_pic = status.getBmiddle_pic();
-        String bmiddle_pic = null;
+    private void setImages(final StatusLostFoundItem statusLostFoundItem, FrameLayout imgContainer, GridView gv_images, ImageView iv_image) {
+        ArrayList<String> pic_urls = statusLostFoundItem.getImage_url();
 
         if (pic_urls != null && pic_urls.size() >= 1) {
             imgContainer.setVisibility(View.VISIBLE);
             gv_images.setVisibility(View.VISIBLE);
             iv_image.setVisibility(View.GONE);
-            StatusGridImgsAdapterDemo gvAdapter = new StatusGridImgsAdapterDemo(context, pic_urls);
+            StatusGridImgsAdapter gvAdapter = new StatusGridImgsAdapter(context, pic_urls);
             gv_images.setAdapter(gvAdapter);
             gv_images.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent intent = new Intent(context, ImageBrowserActivity.class);
-                    intent.putExtra("status", status);
+                    intent.putExtra("status", statusLostFoundItem);
                     intent.putExtra("position", position);
                     context.startActivity(intent);
                 }
             });
 
-        } else if (bmiddle_pic != null) {
-            imgContainer.setVisibility(View.VISIBLE);
-            gv_images.setVisibility(View.GONE);
-            iv_image.setVisibility(View.VISIBLE);
-            Glide.with(context).load(bmiddle_pic).placeholder(R.drawable.pic_postion).into(iv_image);
-            iv_image.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, ImageBrowserActivity.class);
-                    intent.putExtra("status", status);
-                    context.startActivity(intent);
-                }
-            });
         } else {
             imgContainer.setVisibility(View.GONE);
         }
     }
-
 
     static class ViewHolder {
         LinearLayout ll_card_content;
@@ -214,7 +154,6 @@ public class StatusAdapterDemo extends BaseAdapter {
         RelativeLayout rl_content;
         TextView tv_head_name;
         TextView tv_head_desc;
-        ImageView iv_more;
 
         TextView tv_content;
 
@@ -238,11 +177,4 @@ public class StatusAdapterDemo extends BaseAdapter {
         ImageView iv_like_bottom;
         TextView tv_like_bottom;
     }
-
-
 }
-
-
-
-
-
