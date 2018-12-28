@@ -127,6 +127,9 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
                 try {
                     jsonRes = new JSONArray(responseString);
                     for(int i=0;i<jsonRes.length();i++){
+                        if(i>20){
+                            break;
+                        }
                         lostFoundItems.add(new Gson().fromJson(jsonRes.getJSONObject(i).toString(), StatusLostFoundItem.class));
                     }
                     lvHome.setAdapter(new StatusAdapterLostFound(activity, lostFoundItems));

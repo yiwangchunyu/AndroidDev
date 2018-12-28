@@ -90,7 +90,7 @@ public class StatusAdapterLostFound extends BaseAdapter {
         final StatusLostFoundItem statusLostFoundItem = (StatusLostFoundItem) getItem(position);
         Glide.with(context).load(statusLostFoundItem.getAvatarUrl()).bitmapTransform(new CropCircleTransformation(context)).placeholder(R.drawable.head_pistion).into(holder.iv_head);
         holder.tv_head_name.setText(statusLostFoundItem.getNickName());
-        holder.tv_head_desc.setText(statusLostFoundItem.getSubmission_time() + " 来自 " + statusLostFoundItem.getType());
+        holder.tv_head_desc.setText(statusLostFoundItem.getSubmission_time() + "  |  来自 " + statusLostFoundItem.getType());
         //正文
         holder.tv_content.setText(StringUtils.getWeiboContent(context, holder.tv_content, statusLostFoundItem.getMsg()));
         setImages(statusLostFoundItem, holder.include_status_image, holder.gv_images, holder.iv_image);

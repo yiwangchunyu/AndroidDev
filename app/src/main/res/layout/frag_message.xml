@@ -26,7 +26,7 @@
             <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@drawable/messagescenter_at" />
+                android:src="@drawable/notify128" />
 
             <TextView
                 android:layout_width="0dp"
@@ -61,7 +61,7 @@
                 android:id="@+id/iv_left"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@drawable/messagescenter_comments" />
+                android:src="@drawable/comment128" />
 
             <TextView
                 android:id="@+id/tv_subhead"
@@ -98,7 +98,7 @@
             <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@drawable/messagescenter_good" />
+                android:src="@drawable/like128" />
 
             <TextView
                 android:layout_width="0dp"

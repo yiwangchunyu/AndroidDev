@@ -76,6 +76,8 @@ public class StatusAdapterDemo extends BaseAdapter {
             holder.tv_head_name = (TextView) convertView.findViewById(R.id.tv_head_name);
             holder.tv_head_desc = (TextView) convertView.findViewById(R.id.tv_head_desc);
 
+            holder.iv_more = (ImageView) convertView.findViewById(R.id.iv_more);
+
             holder.tv_content = (TextView) convertView.findViewById(R.id.tv_content);
             holder.include_status_image = (FrameLayout) convertView.findViewById(R.id.include_status_image);
             holder.gv_images = (GridView) holder.include_status_image.findViewById(R.id.gv_images);
@@ -107,11 +109,12 @@ public class StatusAdapterDemo extends BaseAdapter {
         Glide.with(context).load(UrlConstants.URL_MEDIA_PRE + user.getAvatar()).bitmapTransform(new CropCircleTransformation(context)).placeholder(R.drawable.head_pistion).into(holder.iv_head);
         holder.tv_head_name.setText(user.getNickname());
         holder.tv_head_desc.setText(status.getCtime());
-//        if (status.getSource().isEmpty()) {
-//            holder.tv_head_desc.setText(DateUtils.getShortTime(status.getCreated_at()));
-//        } else {
-//            holder.tv_head_desc.setText(DateUtils.getShortTime(status.getCreated_at()) + " 来自 " + Html.fromHtml(status.getSource()));
-//        }
+        holder.iv_more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "more option", Toast.LENGTH_LONG).show();
+            }
+        });
         //微博正文
         holder.tv_content.setText(StringUtils.getWeiboContent(context, holder.tv_content, status.getContent()));
         setImages(status, holder.include_status_image, holder.gv_images, holder.iv_image);
@@ -211,6 +214,7 @@ public class StatusAdapterDemo extends BaseAdapter {
         RelativeLayout rl_content;
         TextView tv_head_name;
         TextView tv_head_desc;
+        ImageView iv_more;
 
         TextView tv_content;
 
