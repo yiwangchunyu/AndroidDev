@@ -1,7 +1,6 @@
 package wang.yiwangchunyu.androidfinal.activity;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -28,7 +27,6 @@ import android.widget.Toast;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -38,8 +36,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
-import wang.yiwangchunyu.androidfinal.LoginActivity;
-import wang.yiwangchunyu.androidfinal.MainActivity;
 import wang.yiwangchunyu.androidfinal.R;
 import wang.yiwangchunyu.androidfinal.utils.Adapter;
 import wang.yiwangchunyu.androidfinal.utils.AsyncHttpUtils;
@@ -57,7 +53,7 @@ public class AddActivity extends AppCompatActivity {
     private EditText etContent;
     private String photoPath;
     private Adapter adapter;
-    private Context mContent;
+    private Context mContext;
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -68,7 +64,7 @@ public class AddActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
-        mContent = this;
+        mContext = this;
         etContent = (EditText) findViewById(R.id.content_et);
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
@@ -80,11 +76,15 @@ public class AddActivity extends AppCompatActivity {
         new TitleBuilder(getWindow().getDecorView())
                 .setTitleText("发布")
                 .setLeftImage(R.drawable.close)
-                .setRightImage(R.drawable.send)
+                .setRightImage(R.drawable.send128)
                 .setRightOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        dosend();
+                        if(etContent.getText().toString().length()>0){
+                            dosend();
+                        }else {
+                            Toast.makeText(mContext, "请输入内容！", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 })
                 .setLeftOnClickListener(new View.OnClickListener() {
@@ -136,7 +136,7 @@ public class AddActivity extends AppCompatActivity {
     }
 
     private void dosend() {
-        SharedHelper sh = new SharedHelper(mContent);
+        SharedHelper sh = new SharedHelper(mContext);
         RequestParams params = new RequestParams();
         params.put("user_id", sh.read("userid"));
         params.put("content", etContent.getText().toString());
@@ -157,7 +157,7 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 Log.d(TAG, "fail: " + responseString);
-                ToastUtils.showToast(mContent, "fail: " + responseString, Toast.LENGTH_SHORT);
+                ToastUtils.showToast(mContext, "fail: " + responseString, Toast.LENGTH_SHORT);
             }
 
             @Override
@@ -167,10 +167,10 @@ public class AddActivity extends AppCompatActivity {
                 try {
                     jsonRes = new JSONObject(responseString);
                     if (jsonRes.getInt("code") == 0) {
-                        Toast.makeText(mContent, "发布成功！", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, "发布成功！", Toast.LENGTH_SHORT).show();
 
                     } else {
-                        ToastUtils.showToast(mContent, jsonRes.getString("msg"), Toast.LENGTH_SHORT);
+                        ToastUtils.showToast(mContext, jsonRes.getString("msg"), Toast.LENGTH_SHORT);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

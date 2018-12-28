@@ -127,7 +127,8 @@
         android:padding="10dp"
         android:text="登录"
         android:textColor="#fff"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        />
 
     <RelativeLayout
         android:id="@+id/rl_signup"
