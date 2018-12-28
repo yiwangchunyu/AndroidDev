@@ -281,6 +281,7 @@ public class IosLikeToggleButton extends AppCompatButton implements GestureDetec
 
     @Override
     public void draw(Canvas canvas) {
+        super.draw(canvas);
         boolean checked = isChecked();
         boolean pressed = isPressed();
 

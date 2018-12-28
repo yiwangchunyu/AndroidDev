@@ -11,7 +11,7 @@ import com.githang.androidcrash.AndroidCrash;
 import com.githang.androidcrash.reporter.httpreporter.CrashHttpReporter;
 import com.githang.androidcrash.reporter.mailreporter.CrashEmailReporter;
 
-import wang.yiwangchunyu.androidfinal.bean.User;
+import wang.yiwangchunyu.androidfinal.bean.UserDemo;
 import wang.yiwangchunyu.androidfinal.utils.AppManager;
 
 /**
@@ -19,7 +19,7 @@ import wang.yiwangchunyu.androidfinal.utils.AppManager;
  */
 
 public class BaseApplication extends Application {
-    public User currentUser;
+    public UserDemo currentUser;
     private static BaseApplication mApplication;
 
     @Override

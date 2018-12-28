@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:hint="球球的画"
             android:maxLines="1"
-            android:textColor="@color/orange"
+            android:textColor="@color/ecnu"
             android:textSize="@dimen/txtsize_subhead" />
 
         <TextView

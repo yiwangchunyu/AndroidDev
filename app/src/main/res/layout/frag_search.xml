@@ -25,14 +25,15 @@
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/tv_lostfound"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"
-            android:drawableLeft="@drawable/d_bizui"
+            android:drawableLeft="@drawable/list32"
             android:gravity="center_vertical"
             android:paddingStart="10dp"
-            android:text="emienm"
-            android:paddingLeft="10dp" />
+            android:paddingLeft="10dp"
+            android:text="#失物招领#" />
 
         <View
             android:layout_width="1dp"
@@ -43,11 +44,11 @@
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"
-            android:drawableLeft="@drawable/d_bizui"
+            android:drawableLeft="@drawable/people_posion32"
             android:gravity="center_vertical"
             android:paddingStart="10dp"
-            android:text="#emienm#"
-            android:paddingLeft="10dp" />
+            android:paddingLeft="10dp"
+            android:text="#校园新鲜事#" />
 
     </LinearLayout>
 
@@ -66,11 +67,11 @@
 
             android:layout_height="40dp"
             android:layout_weight="1"
-            android:drawableLeft="@drawable/d_bizui"
+            android:drawableLeft="@drawable/clock32"
             android:gravity="center_vertical"
             android:paddingStart="10dp"
-            android:text="emienm"
-            android:paddingLeft="10dp" />
+            android:paddingLeft="10dp"
+            android:text="#师大今天#" />
 
         <View
             android:layout_width="1dp"
@@ -82,11 +83,11 @@
 
             android:layout_height="40dp"
             android:layout_weight="1"
-            android:drawableLeft="@drawable/d_bizui"
+            android:drawableLeft="@drawable/buy32"
             android:gravity="center_vertical"
             android:paddingStart="10dp"
-            android:text="emienm"
-            android:paddingLeft="10dp" />
+            android:paddingLeft="10dp"
+            android:text="#校园二手街#" />
 
     </LinearLayout>
 
@@ -95,5 +96,27 @@
         android:layout_height="20px"
         android:background="@color/divider_gray" />
 
+    <com.aspsine.swipetoloadlayout.SwipeToLoadLayout
+        android:id="@+id/swipeToLoadLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
+        <wang.yiwangchunyu.androidfinal.widget.RefreshHeaderView
+            android:id="@id/swipe_refresh_header"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:gravity="center" />
+
+        <ListView
+            android:id="@+id/swipe_target"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <wang.yiwangchunyu.androidfinal.widget.LoadMoreFooterView
+            android:id="@id/swipe_load_more_footer"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:gravity="center" />
+    </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
 </LinearLayout>

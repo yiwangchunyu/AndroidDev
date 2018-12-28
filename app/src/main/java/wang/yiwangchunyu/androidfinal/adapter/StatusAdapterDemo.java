@@ -170,7 +170,7 @@ public class StatusAdapterDemo extends BaseAdapter {
 //        String bmiddle_pic = status.getBmiddle_pic();
         String bmiddle_pic = null;
 
-        if (pic_urls != null && pic_urls.size() > 1) {
+        if (pic_urls != null && pic_urls.size() >= 1) {
             imgContainer.setVisibility(View.VISIBLE);
             gv_images.setVisibility(View.VISIBLE);
             iv_image.setVisibility(View.GONE);

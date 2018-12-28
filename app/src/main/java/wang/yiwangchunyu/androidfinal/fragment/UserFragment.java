@@ -13,8 +13,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,13 +26,18 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cz.msebera.android.httpclient.Header;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import wang.yiwangchunyu.androidfinal.BaseApplication;
 import wang.yiwangchunyu.androidfinal.BaseFragment;
 import wang.yiwangchunyu.androidfinal.R;
 import wang.yiwangchunyu.androidfinal.SettingActivity;
+import wang.yiwangchunyu.androidfinal.activity.NewUserInfoActivity;
 import wang.yiwangchunyu.androidfinal.adapter.UserItemAdapter;
-import wang.yiwangchunyu.androidfinal.bean.User;
+import wang.yiwangchunyu.androidfinal.bean.UserDemo;
 import wang.yiwangchunyu.androidfinal.bean.UserItem;
+import wang.yiwangchunyu.androidfinal.constants.UrlConstants;
+import wang.yiwangchunyu.androidfinal.utils.AsyncHttpUtils;
+import wang.yiwangchunyu.androidfinal.utils.SharedHelper;
 import wang.yiwangchunyu.androidfinal.utils.TitleBuilder;
 import wang.yiwangchunyu.androidfinal.utils.ToastUtils;
 import wang.yiwangchunyu.androidfinal.widget.WrapHeightListView;
@@ -39,6 +48,7 @@ import wang.yiwangchunyu.androidfinal.widget.WrapHeightListView;
 
 public class UserFragment extends BaseFragment {
 
+    private static final String TAG = "UserFragment";
     private LinearLayout ll_userinfo;
 
     private ImageView iv_avatar;
@@ -51,7 +61,7 @@ public class UserFragment extends BaseFragment {
 
     private WrapHeightListView lv_user_items;
 
-    private User user;
+    private UserDemo user;
 
     Unbinder unbinder;
     private View view;
@@ -77,32 +87,42 @@ public class UserFragment extends BaseFragment {
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-//        super.onHiddenChanged(hidden);
-//        Oauth2AccessToken mAccessToken = AccessTokenKeeper.readAccessToken(activity);
-//        String token = mAccessToken.getToken();
-//        String uid = mAccessToken.getUid();
-//        RequestParams params = new RequestParams();
-//        params.put("access_token", token);
-//        params.put("uid", uid);
-//        if (!hidden) {
-//            AsyncHttpUtils.get("users/show.json", params, new TextHttpResponseHandler() {
-//                @Override
-//                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-//                    Log.d("usershow", responseString);
-//                }
-//
-//                @Override
-//                public void onSuccess(int statusCode, Header[] headers, String responseString) {
-//                    ToastUtils.showToast(activity, "onSuccess", Toast.LENGTH_SHORT);
-//                    Log.d("usershow", responseString);
-//                    BaseApplication application = (BaseApplication) activity.getApplication();
-//                    application.currentUser = new Gson().fromJson(responseString, User.class);
-//                    setUserInfo();
-//                }
-//            });
-//
-//
-//        }
+        super.onHiddenChanged(hidden);
+        RequestParams params = new RequestParams();
+        SharedHelper sh = new SharedHelper(getContext());
+        String userid = sh.read("userid");
+        params.put("id", sh.read("userid"));
+        if (!hidden) {
+            AsyncHttpUtils.post("/user/getById", params, new TextHttpResponseHandler() {
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    Log.d(TAG, "fail: " + responseString);
+                    ToastUtils.showToast(getContext(), "fail: " + responseString, Toast.LENGTH_SHORT);
+                }
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                    Log.d(TAG, responseString);
+                    JSONObject jsonRes = null;
+                    try {
+                        jsonRes = new JSONObject(responseString);
+                        if (jsonRes.getInt("code") == 0) {
+                            String data = jsonRes.getJSONObject("data").toString();
+//                            BaseApplication application = (BaseApplication) activity.getApplication();
+                            UserDemo currentUser = new Gson().fromJson(data, UserDemo.class);
+                            setUserInfo(currentUser);
+
+                        } else {
+                            ToastUtils.showToast(getContext(), jsonRes.getString("msg"), Toast.LENGTH_SHORT);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+
+        }
     }
 
     private void initView() {
@@ -139,42 +159,43 @@ public class UserFragment extends BaseFragment {
     }
 
     private void setItem() {
-        userItems.add(new UserItem(false, R.drawable.push_icon_app_small_1, "新的朋友", ""));
-        userItems.add(new UserItem(false, R.drawable.push_icon_app_small_2, "微博等级", "Lv13"));
-        userItems.add(new UserItem(false, R.drawable.push_icon_app_small_3, "编辑资料", ""));
-        userItems.add(new UserItem(true, R.drawable.push_icon_app_small_4, "我的相册", "(18)"));
-        userItems.add(new UserItem(false, R.drawable.push_icon_app_small_5, "我的点评", ""));
-        userItems.add(new UserItem(false, R.drawable.push_icon_app_small_4, "我的赞", "(32)"));
-        userItems.add(new UserItem(true, R.drawable.push_icon_app_small_3, "微博支付", ""));
-        userItems.add(new UserItem(false, R.drawable.push_icon_app_small_2, "微博运动", "步数、卡路里、跑步轨迹"));
-        userItems.add(new UserItem(true, R.drawable.push_icon_app_small_1, "更多", "收藏、名片"));
+        userItems.add(new UserItem(false, R.drawable.mine_newfriend128, "新的朋友", ""));
+        userItems.add(new UserItem(false, R.drawable.mine_editor_blue128, "编辑资料", ""));
+        userItems.add(new UserItem(true, R.drawable.mine_album128, "我的相册", "(18)"));
+        userItems.add(new UserItem(false, R.drawable.mine_favarite128, "我的收藏", "(23)"));
+        userItems.add(new UserItem(false, R.drawable.mine_like128, "我的赞", "(32)"));
+        userItems.add(new UserItem(true, R.drawable.table128, "我的课表", ""));
+        userItems.add(new UserItem(false, R.drawable.mine_badminton128, "校园运动", "组团打卡、场馆预约"));
+        userItems.add(new UserItem(false, R.drawable.mine_water128, "宿舍电费", ""));
+        userItems.add(new UserItem(true, R.drawable.mine_more128, "更多", ""));
         adapter.notifyDataSetChanged();
     }
 
-    private void setUserInfo() {
+    private void setUserInfo(UserDemo currentUser) {
 //        user = ((BaseApplication) activity.getApplication()).currentUser;
-//
-//        if (user == null) {
-//            return;
-//        }
-//
-//        // set data
-//        tv_subhead.setText(user.getName());
-//        tv_caption.setText("简介:" + user.getDescription());
-//        Glide.with(activity).load(user.getAvatar_hd()).bitmapTransform(new CropCircleTransformation(activity)).into(iv_avatar);
-//        tv_status_count.setText("" + user.getStatuses_count());
-//        tv_follow_count.setText("" + user.getFriends_count());
-//        tv_fans_count.setText("" + user.getFollowers_count());
-//
-//        iv_avatar.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String screen_name = user.getScreen_name();
-//                Intent intent = new Intent(activity, NewUserInfoActivity.class);
-//                intent.putExtra("screen_name", screen_name);
-//                startActivity(intent);
-//            }
-//        });
+        user = currentUser;
+
+        if (user == null) {
+            return;
+        }
+
+        // set data
+        tv_subhead.setText(user.getNickname());
+        tv_caption.setText("简介:" + "低调码农本汪");
+        Glide.with(activity).load(UrlConstants.URL_MEDIA_PRE + user.getAvatar()).bitmapTransform(new CropCircleTransformation(activity)).into(iv_avatar);
+        tv_status_count.setText("0");
+        tv_follow_count.setText("0");
+        tv_fans_count.setText("0");
+
+        iv_avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String screen_name = user.getNickname();
+                Intent intent = new Intent(activity, NewUserInfoActivity.class);
+                intent.putExtra("screen_name", screen_name);
+                startActivity(intent);
+            }
+        });
     }
 
 

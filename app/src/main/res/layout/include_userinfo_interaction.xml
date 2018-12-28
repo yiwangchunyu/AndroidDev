@@ -16,12 +16,13 @@
 
         <TextView
             android:id="@+id/tv_status_count"
-            style="@style/TextViewBody" />
+            style="@style/TextViewBody"
+            android:text="0" />
 
         <TextView
             style="@style/TextViewBody"
             android:layout_marginTop="4dp"
-            android:text="微博"
+            android:text="动态"
             android:textColor="@color/txt_gray" />
     </LinearLayout>
 
@@ -37,7 +38,8 @@
 
         <TextView
             android:id="@+id/tv_follow_count"
-            style="@style/TextViewBody" />
+            style="@style/TextViewBody"
+            android:text="0" />
 
         <TextView
             style="@style/TextViewBody"
@@ -58,7 +60,8 @@
 
         <TextView
             android:id="@+id/tv_fans_count"
-            style="@style/TextViewBody" />
+            style="@style/TextViewBody"
+            android:text="0" />
 
         <TextView
             style="@style/TextViewBody"

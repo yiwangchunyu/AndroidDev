@@ -41,5 +41,7 @@
     <color name="discover_fragment_searchHeadView_inner_bg">#E3E4E6</color>
     <color name="colorClick">#2b4aaf</color>
     <color name="ecnu">#b20537</color>
+    <color name="ecnuBlue">#006597</color>
+    <color name="ecnuBlueLight">#5691af</color>
 
 </resources>
