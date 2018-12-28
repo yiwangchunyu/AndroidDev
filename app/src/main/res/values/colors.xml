@@ -43,5 +43,6 @@
     <color name="ecnu">#b20537</color>
     <color name="ecnuBlue">#006597</color>
     <color name="ecnuBlueLight">#5691af</color>
+    <color name="ecnuButton">#64a5c6</color>
 
 </resources>
