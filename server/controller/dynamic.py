@@ -1,7 +1,9 @@
 import os
 
+from server import models
 from server.models import Dynamic
 from server.service import UserService
+from server.service.UserService import get, getById
 from server.utils import RR
 from server.service import DynamicService
 from AndroidFinalService import settings
@@ -26,3 +28,18 @@ def create(request):
         dynamic.save()
         print(dict)
     return RR.finish(0,"ok",[])
+
+def getAll(request):
+    ret={}
+    params = request.POST.dict()
+    res = models.Dynamic.objects.filter(**params).order_by('-ctime').values()
+    res = list(res)
+    for r in res:
+        r['user']=getById(r['user_id'])
+        r['user']['password']="invisiable"
+        r['pic_urls']=[{'thumbnail_pic':r['img'+str(i+1)],'bmiddle_pic':r['img'+str(i+1)],'original_pic':r['img'+str(i+1)],'showOriImag':False} for i in range(r['img_count'])]
+        for i in range(9):
+            del r['img'+str(i+1)]
+    ret['statuses']=res
+    ret['total_number']=len(res)
+    return RR.finish(0, "ok", ret)

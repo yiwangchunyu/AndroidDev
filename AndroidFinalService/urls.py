@@ -18,12 +18,15 @@ from django.contrib import admin
 from django.urls import path, include
 
 from django.conf.urls import url
+from django.views.static import serve
 
+from AndroidFinalService import settings
 from . import view
  
 urlpatterns = [
     url(r'^hello$', view.hello),
     path('admin/', admin.site.urls),
     url(r'^server/', include('server.urls')),
-
+    url(r'media/(?P<path>.*)', serve, {'document_root':settings.MEDIA_ROOT}),
 ]
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -21,7 +21,7 @@ def update(request):
 
 def get(request):
     params = request.POST.dict()
-    res = UserService.getById(params)
+    res = UserService.get(params)
     return RR.finish(0, "ok", res)
 
 def validate(request):
@@ -31,3 +31,9 @@ def validate(request):
         return RR.finish(-1, "用户名或密码错误！", res)
     else:
         return RR.finish(0, "ok", res)
+
+def getById(request):
+    params = request.POST.dict()
+    res = UserService.getById(params['id'])
+    res['password']='invisiable'
+    return RR.finish(0, "ok", res)

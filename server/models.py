@@ -9,7 +9,7 @@ class User(models.Model):
     nickname = models.CharField(max_length=32)
     password = models.CharField(max_length=32)
     gender = models.IntegerField(default=1)
-    avatar = models.ImageField(null=True,blank=True,upload_to='avatar')
+    avatar = models.ImageField(default='avatar/default.jpg',upload_to='avatar')
     status = models.IntegerField(default=1)
     ctime = models.DateTimeField(default= timezone.now)
     mtime = models.DateTimeField(auto_now=True)

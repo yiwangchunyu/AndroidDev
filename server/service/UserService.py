@@ -17,7 +17,7 @@ def update(params):
     return []
 
 
-def getById(params):
+def get(params):
     user = models.User.objects.filter(**params)
     json_data = serializers.serialize('json', user)
     json_data = json.loads(json_data)
@@ -37,3 +37,8 @@ def validate(phone, password):
         return list(user)
     else:
         return False
+
+def getById(id):
+    user = models.User.objects.filter(id=id).values()
+    user = list(user)
+    return user[0]
