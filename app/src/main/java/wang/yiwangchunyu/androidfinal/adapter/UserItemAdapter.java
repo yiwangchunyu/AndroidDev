@@ -1,6 +1,7 @@
 package wang.yiwangchunyu.androidfinal.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import wang.yiwangchunyu.androidfinal.R;
+import wang.yiwangchunyu.androidfinal.activity.ProfileEditorActivity;
 import wang.yiwangchunyu.androidfinal.bean.UserItem;
 import wang.yiwangchunyu.androidfinal.utils.ToastUtils;
 
@@ -67,6 +69,11 @@ public class UserItemAdapter extends BaseAdapter {
         holder.ll_content.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                switch (position){
+                    case 1:
+                        Intent it = new Intent(context, ProfileEditorActivity.class);
+                        context.startActivity(it);
+                }
                 ToastUtils.showToast(context, "item click position = " + position, Toast.LENGTH_SHORT);
             }
         });
