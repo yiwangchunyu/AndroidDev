@@ -25,7 +25,7 @@ import wang.yiwangchunyu.androidfinal.utils.DateUtils;
 import wang.yiwangchunyu.androidfinal.utils.StringUtils;
 
 /**
- * Created by eminem on 2017/8/9.
+ *
  * 消息页adapter
  */
 

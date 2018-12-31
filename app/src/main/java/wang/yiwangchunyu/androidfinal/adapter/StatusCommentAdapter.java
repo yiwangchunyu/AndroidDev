@@ -23,7 +23,7 @@ import wang.yiwangchunyu.androidfinal.utils.StringUtils;
 import wang.yiwangchunyu.androidfinal.utils.ToastUtils;
 
 /**
- * Created by eminem on 2017/6/6.
+ *
  */
 
 public class StatusCommentAdapter extends BaseAdapter {

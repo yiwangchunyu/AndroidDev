@@ -34,8 +34,8 @@ import wang.yiwangchunyu.androidfinal.utils.StringUtils;
 import wang.yiwangchunyu.androidfinal.utils.ToastUtils;
 
 /**
- * Created by eminem on 2017/4/28.
- * 微博首页adapter
+ *
+ * 首页adapter
  */
 
 public class StatusAdapter extends BaseAdapter {

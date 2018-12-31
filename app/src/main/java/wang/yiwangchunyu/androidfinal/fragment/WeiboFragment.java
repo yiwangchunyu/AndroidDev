@@ -45,7 +45,7 @@ import wang.yiwangchunyu.androidfinal.utils.ToastUtils;
  */
 
 public class WeiboFragment extends BaseFragment {
-    private static final String TAG = "WeiboFragment";
+    private static final String TAG = "HomeFragment";
     private SwipeToLoadLayout swipeToLoadLayout;
     private ListView lvHome;
     private View view;

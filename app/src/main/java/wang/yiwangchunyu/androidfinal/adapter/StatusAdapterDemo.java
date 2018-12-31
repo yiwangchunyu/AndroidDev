@@ -35,7 +35,7 @@ import wang.yiwangchunyu.androidfinal.utils.StringUtils;
 import wang.yiwangchunyu.androidfinal.utils.ToastUtils;
 
 /**
- * Created by eminem on 2017/4/28.
+ *
  * 微博首页adapter
  */
 
@@ -103,7 +103,7 @@ public class StatusAdapterDemo extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        //微博用户
+        //用户
         final StatusDemo status = (StatusDemo) getItem(position);
         final UserDemo user = status.getUser();
         Glide.with(context).load(UrlConstants.URL_MEDIA_PRE + user.getAvatar()).bitmapTransform(new CropCircleTransformation(context)).placeholder(R.drawable.head_pistion).into(holder.iv_head);
@@ -115,7 +115,7 @@ public class StatusAdapterDemo extends BaseAdapter {
                 Toast.makeText(context, "more option", Toast.LENGTH_LONG).show();
             }
         });
-        //微博正文
+        //正文
         holder.tv_content.setText(StringUtils.getWeiboContent(context, holder.tv_content, status.getContent()));
         setImages(status, holder.include_status_image, holder.gv_images, holder.iv_image);
 

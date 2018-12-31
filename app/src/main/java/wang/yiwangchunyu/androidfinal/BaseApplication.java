@@ -45,7 +45,7 @@ public class BaseApplication extends Application {
      */
     private void initEmailReporter() {
         CrashEmailReporter reporter = new CrashEmailReporter(this);
-        reporter.setReceiver("你的接收邮箱");
+        reporter.setReceiver("yiwangchunyu@163.com");
         reporter.setSender("yiwangchunyu@163.com");
         reporter.setSendPassword("19970917why");
         reporter.setSMTPHost("smtp.163.com");

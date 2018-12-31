@@ -9,7 +9,7 @@ import android.widget.TextView;
 import wang.yiwangchunyu.androidfinal.R;
 
 /**
- * Created by Eminem on 2016/11/30.
+ *
  * builder模式构建可复用titlebar
  */
 
